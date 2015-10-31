@@ -7,7 +7,21 @@ class App{
 	protected $params= [];
 	public function __construct(){
 		//echo "OK";
-		print_r($this->parseUrl());
+		//print_r($this->parseUrl());
+		$url = $this->parseUrl();
+		print_r($url);
+		if(file_exists('../app/controllers/'.$url[0].'.php')){
+			$this->controller = $url[0];
+			unset($url[0]);
+		}
+		require_once '../app/controllers/'.$this->controller.'.php';
+		$this->controller = new $this->controller;
+		if(isset($url[1])){
+			if(method_exists($this->controller, $url[1])){
+				echo 'OK';
+			}
+		}
+
 	}
 
 	public function parseUrl(){
